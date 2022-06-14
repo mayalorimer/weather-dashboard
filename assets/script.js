@@ -93,12 +93,60 @@ displayCurrentWeather();
          })
          .then(function (data) {
              console.log(data);
-             Ktemp = data.list[1].main.temp; 
-             temp = Math.floor((Ktemp - 273)*(9/5) + 32); 
-             weather = data.list[1].weather[0].main;
-             console.log(temp);
-             console.log(weather);
+             for (var i = 0; i < data.length; i++){
+                Ktemp = data.list[1].main.temp; 
+                temp = Math.floor((Ktemp - 273)*(9/5) + 32); 
+                var newDate = moment().add(i + 1, 'days');
+                date = newDate.format("MM-DD-YY");
+                weatherIcon 
+                temp
+                windSpeed
+                humidity
+                display5day(i);
+             }
+           
          })
  }
 
 */
+
+// do this for each of the five days in the upcoming forecast
+function display5day(i){
+    var newDiv = document.createElement('div');
+    // adding the date
+    var new1 = document.createElement('p'); 
+    var date1 = document.createTextNode(date); 
+    new1.appendChild(date1);
+    newDiv.appendChild(new1);
+    document.body.appendChild(newDiv); 
+
+    // adding the weather icon
+    var new2 = document.createElement('p'); 
+    var date2 = document.createTextNode(weatherIcon); 
+    new2.appendChild(date2);
+    newDiv.appendChild(new2);
+    document.body.appendChild(newDiv); 
+
+    // adding the temp
+    var new3 = document.createElement('p'); 
+    var date3 = document.createTextNode(temp); 
+    new3.appendChild(date3);
+    newDiv.appendChild(new3);
+    document.body.appendChild(newDiv); 
+
+    // adding the wind
+    var new4 = document.createElement('p'); 
+    var date4 = document.createTextNode(windSpeed); 
+    new4.appendChild(date4);
+    newDiv.appendChild(new4);
+    document.body.appendChild(newDiv); 
+
+    // adding the humidity
+    var new4 = document.createElement('p'); 
+    var date4 = document.createTextNode(humidity); 
+    new4.appendChild(date4);
+    newDiv.appendChild(new4);
+    document.body.appendChild(newDiv); 
+  
+}
+display5day(5); 
