@@ -4,7 +4,11 @@ body {
 }
 
 .current-city,
-.weather {
+.weather,
+.icon {
     display: none; 
 }
 
+#currentWeather {
+    border-style: solid; 
+}

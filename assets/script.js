@@ -17,6 +17,7 @@ var UVindex;
 
 var currentTitle = document.querySelector('.current-city'); 
 var current = document.querySelector('.weather');
+var iconEl = document.querySelector('.icon');
 
 
 // on submit for the city
@@ -24,6 +25,7 @@ submitBtn.addEventListener('click', function(event){
     event.preventDefault();
     currentTitle.style.display = "block"; 
     current.style.display = "block";
+    iconEl.style.display = "block";
     city = cityContent.value; 
     searchHistory.push(city); 
     latLong();
@@ -42,7 +44,6 @@ function latLong(){
             return response.json();
         })
         .then(function(data) {
-            console.log(data);
             lat = data[0].lat;
             long = data[0].lon; 
             currentWeather();
@@ -59,13 +60,11 @@ function currentWeather(){
             return response.json();
         })
         .then(function(data){
-            console.log(data);
             Ktemp = data.main.temp; 
             temp = Math.floor((Ktemp - 273)*(9/5) + 32);
             humidity = data.main.humidity;
-            windSpeed = data.wind.windspeed; 
+            windSpeed = data.wind.speed; 
             weatherIcon = data.weather.icon;
-            console.log("check");
             displayCurrentWeather(); 
         })
 }
@@ -85,8 +84,8 @@ function displayCurrentWeather(){
     currenthumidEl.textContent = "Humidity: " + humidity; 
     currentWindEl.textContent = "Wind speed: " + windSpeed + ' mph'; 
     currentUVEl.textContent = "UV Index: " + UVindex;
-    var imgUrl = "http://openweathermap.org/img/wn/" + weatherIcon + ".png";
-    currentIcon.setAttribute("src", imgUrl);
+//    var imgUrl = "http://openweathermap.org/img/wn/" + weatherIcon + ".png";
+//    currentIcon.setAttribute("src", imgUrl);
 }
 
 
@@ -98,19 +97,25 @@ function displayCurrentWeather(){
              return response.json();
          })
          .then(function (data) {
-             console.log(data);
-             for (var i = 0; i < data.length; i++){
+            console.log(data);
+            for (var i = 0; i < 5; i++){
+                console.log("test");
                 Ktemp = data.list[i].main.temp; 
                 temp = Math.floor((Ktemp - 273)*(9/5) + 32); 
                 var newDate = moment().add(i + 1, 'days');
+                console.log(temp + ' temp');
                 date = newDate.format("MM-DD-YY");
+                console.log(date);
                 weatherIcon = data.list[i].weather.icon;
+                console.log(weatherIcon + " weather icon");
                 windSpeed = data.list[i].wind.speed;
+                console.log(windSpeed + " wind");
                 humidity = data.list[i].main.humidity;
+                console.log(humidity + " humid"); 
                 display5day(date, weatherIcon, temp, windSpeed, humidity);
              }
            
-         })
+         });
  }
 
 
