@@ -1,8 +1,5 @@
 var cityContent = document.getElementById('city'); 
 var submitBtn = document.getElementById('submit');
-var lat;
-var long; 
-var city;
 var weather;
 var searchHistory = []; 
 
@@ -14,6 +11,9 @@ var temp;
 var humidity;
 var windSpeed;
 var UVindex; 
+var newCity; 
+var lat;
+var long;
 
 var currentTitle = document.querySelector('.current-city'); 
 var current = document.querySelector('.weather');
@@ -28,7 +28,7 @@ submitBtn.addEventListener('click', function(event){
     iconEl.style.display = "block";
     city = cityContent.value; 
     searchHistory.push(city); 
-    latLong();
+    latLong(city);
     storage(); 
 })
 
@@ -38,7 +38,7 @@ submitBtn.addEventListener('click', function(event){
 
 
 //returns latitude and longitude
-function latLong(){
+function latLong(city){
     var geocodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=` + city + `&limit=5&appid=c99c17905b00b5b873d957ca08c3669d`;
     fetch(geocodeUrl)
         .then(function(response){
@@ -47,14 +47,15 @@ function latLong(){
         .then(function(data) {
             lat = data[0].lat;
             long = data[0].lon; 
-            currentWeather();
+            console.log(city); 
+            currentWeather(city);
             weatherApi(); 
         })
 }
 
 
 //current weather API cal 
-function currentWeather(){
+function currentWeather(city){
     var currentUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + long + '&appid=c99c17905b00b5b873d957ca08c3669d';
     fetch(currentUrl)
         .then(function(response){
@@ -66,6 +67,7 @@ function currentWeather(){
             humidity = data.main.humidity;
             windSpeed = data.wind.speed; 
             weatherIcon = data.weather[0].icon;
+            newCity = city; 
             UVApi(); 
         })
 }
@@ -105,7 +107,7 @@ function displayCurrentWeather(){
         color = "#FF0000"; 
     }
 
-    currentDate.textContent = moment().format("MM-DD-YY");
+    currentDate.textContent = newCity + ", " + moment().format("MM-DD-YY");
     currentTempEl.textContent = "Temperature: " + temp;
     currenthumidEl.textContent = "Humidity: " + humidity; 
     currentWindEl.textContent = "Wind speed: " + windSpeed + ' mph'; 
@@ -125,7 +127,6 @@ function displayCurrentWeather(){
              return response.json();
          })
          .then(function (data) {
-            console.log(data);
             for (var i = 0; i < 5; i++){
                 Ktemp = data.list[i].main.temp; 
                 temp = Math.floor((Ktemp - 273)*(9/5) + 32); 
@@ -141,11 +142,11 @@ function displayCurrentWeather(){
  }
 
 
-
+ var newDiv = document.createElement('div');
+ newDiv.setAttribute("style", "border-style: solid");
+ newDiv.setAttribute("class", "weather-display");
 // do this for each of the five days in the upcoming forecast
 function display5day(date, weatherIcon, temp, windSpeed, humidity){
-    var newDiv = document.createElement('div');
-    newDiv.setAttribute("style", "border-style: solid");
     // adding the date
     var new1 = document.createElement('p'); 
     var date1 = document.createTextNode(date); 
@@ -217,3 +218,12 @@ function displayStorage(){
     }
 
 }
+
+
+historyList.addEventListener('click', function(event){
+    var selectedCity = event.target.textContent;
+    city = selectedCity;  
+    var weatherDisplay = document.querySelector('.weather-display'); 
+    weatherDisplay.innerHTML = ""; 
+    latLong(selectedCity); 
+})
