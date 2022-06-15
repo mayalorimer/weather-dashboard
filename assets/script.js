@@ -64,8 +64,21 @@ function currentWeather(){
             temp = Math.floor((Ktemp - 273)*(9/5) + 32);
             humidity = data.main.humidity;
             windSpeed = data.wind.speed; 
-            weatherIcon = data.weather.icon;
-            displayCurrentWeather(); 
+            weatherIcon = data.weather[0].icon;
+            UVApi(); 
+        })
+}
+
+// API call for UV index
+function UVApi(){
+    var UVUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + long + '&appid=c99c17905b00b5b873d957ca08c3669d';
+    fetch(UVUrl)
+        .then(function (response){
+            return response.json();
+        })
+        .then(function(data){
+            UVindex = data.current.uvi; 
+            displayCurrentWeather();
         })
 }
 
@@ -79,13 +92,27 @@ var currentIcon = document.querySelector('.icon');
 var currentDate = document.querySelector('.date');
 //function to display the current weather
 function displayCurrentWeather(){
+    //decides the color for the UV index
+    var color; 
+    if (UVindex <= 2) {
+        color = '#00FF00';
+    }
+    else if (UVindex > 2 && UVindex <= 5) {
+        color = '#FFFF00'; 
+    }
+    else {
+        color = "#FF0000"; 
+    }
+
     currentDate.textContent = moment().format("MM-DD-YY");
     currentTempEl.textContent = "Temperature: " + temp;
     currenthumidEl.textContent = "Humidity: " + humidity; 
     currentWindEl.textContent = "Wind speed: " + windSpeed + ' mph'; 
     currentUVEl.textContent = "UV Index: " + UVindex;
-//    var imgUrl = "http://openweathermap.org/img/wn/" + weatherIcon + ".png";
-//    currentIcon.setAttribute("src", imgUrl);
+    currentUVEl.setAttribute('style', "background-color: " + color); 
+    var imgUrl = "http://openweathermap.org/img/w/" + weatherIcon + ".png";
+    currentIcon.setAttribute("src", imgUrl);
+
 }
 
 
@@ -99,19 +126,13 @@ function displayCurrentWeather(){
          .then(function (data) {
             console.log(data);
             for (var i = 0; i < 5; i++){
-                console.log("test");
                 Ktemp = data.list[i].main.temp; 
                 temp = Math.floor((Ktemp - 273)*(9/5) + 32); 
                 var newDate = moment().add(i + 1, 'days');
-                console.log(temp + ' temp');
                 date = newDate.format("MM-DD-YY");
-                console.log(date);
-                weatherIcon = data.list[i].weather.icon;
-                console.log(weatherIcon + " weather icon");
+                weatherIcon = data.list[i].weather[0].icon;
                 windSpeed = data.list[i].wind.speed;
-                console.log(windSpeed + " wind");
                 humidity = data.list[i].main.humidity;
-                console.log(humidity + " humid"); 
                 display5day(date, weatherIcon, temp, windSpeed, humidity);
              }
            
@@ -123,6 +144,7 @@ function displayCurrentWeather(){
 // do this for each of the five days in the upcoming forecast
 function display5day(date, weatherIcon, temp, windSpeed, humidity){
     var newDiv = document.createElement('div');
+    newDiv.setAttribute("style", "border-style: solid");
     // adding the date
     var new1 = document.createElement('p'); 
     var date1 = document.createTextNode(date); 
@@ -131,15 +153,16 @@ function display5day(date, weatherIcon, temp, windSpeed, humidity){
     document.body.appendChild(newDiv); 
 
     // adding the weather icon
-    var new2 = document.createElement('p'); 
-    var date2 = document.createTextNode(weatherIcon); 
-    new2.appendChild(date2);
+    var new2 = document.createElement('img'); 
+    var imgUrl = "http://openweathermap.org/img/w/" + weatherIcon + ".png";
+    new2.setAttribute("alt", "Weather icon"); 
+    new2.setAttribute("src", imgUrl);
     newDiv.appendChild(new2);
     document.body.appendChild(newDiv); 
 
     // adding the temp
     var new3 = document.createElement('p'); 
-    var date3 = document.createTextNode(temp); 
+    var date3 = document.createTextNode("Temperature: " + temp); 
     new3.appendChild(date3);
     newDiv.appendChild(new3);
     document.body.appendChild(newDiv); 
@@ -153,7 +176,7 @@ function display5day(date, weatherIcon, temp, windSpeed, humidity){
 
     // adding the humidity
     var new4 = document.createElement('p'); 
-    var date4 = document.createTextNode(humidity); 
+    var date4 = document.createTextNode("Humidity: " + humidity + "%"); 
     new4.appendChild(date4);
     newDiv.appendChild(new4);
     document.body.appendChild(newDiv); 
