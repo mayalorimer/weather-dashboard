@@ -2,3 +2,9 @@ body {
     margin: 5px; 
     padding: 5px;
 }
+
+.current-city,
+.weather {
+    display: none; 
+}
+
