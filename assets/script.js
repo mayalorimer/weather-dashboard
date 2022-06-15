@@ -29,6 +29,7 @@ submitBtn.addEventListener('click', function(event){
     city = cityContent.value; 
     searchHistory.push(city); 
     latLong();
+    storage(); 
 })
 
 
@@ -183,3 +184,36 @@ function display5day(date, weatherIcon, temp, windSpeed, humidity){
   
 }
  
+var cityArr = []; 
+
+function storage(){
+    //checks for a stored list
+    var storedCities = JSON.parse(localStorage.getItem('cityArr'));
+    if (storedCities === null){
+        cityArr.push(city); 
+    }
+    else {
+        cityArr = storedCities; 
+        cityArr.push(city); 
+    }
+
+
+//add the city to local storage
+localStorage.setItem('cityArr', JSON.stringify(cityArr));
+displayStorage(); 
+}
+
+var historyList = document.querySelector('.history-list'); 
+
+//function to display the storage
+function displayStorage(){
+    var storedCities = JSON.parse(localStorage.getItem('cityArr'));
+    if (storedCities !== null){
+        for (var i = 0; i < storedCities.length; i ++){
+            console.log(storedCities[i]);
+            
+            historyList.innerHTML += '<li>' + storedCities[i] + '</li>';
+        }
+    }
+
+}

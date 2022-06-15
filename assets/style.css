@@ -9,6 +9,6 @@ body {
     display: none; 
 }
 
-#currentWeather {
-    border-style: solid; 
+.five-day-forecast {
+    display: inline; 
 }
