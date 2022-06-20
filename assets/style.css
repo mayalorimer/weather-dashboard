@@ -10,5 +10,6 @@ body {
 }
 
 .five-day-forecast {
+    display: flex; 
     display: inline; 
 }

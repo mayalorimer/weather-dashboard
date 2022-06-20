@@ -39,7 +39,7 @@ submitBtn.addEventListener('click', function(event){
 
 //returns latitude and longitude
 function latLong(city){
-    var geocodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=` + city + `&limit=5&appid=c99c17905b00b5b873d957ca08c3669d`;
+    var geocodeUrl = `https://api.openweathermap.org/geo/1.0/direct?q=` + city + `&limit=5&appid=c99c17905b00b5b873d957ca08c3669d`;
     fetch(geocodeUrl)
         .then(function(response){
             return response.json();
@@ -121,7 +121,7 @@ function displayCurrentWeather(){
 
  //returns weather for the 5 day forecast
  function weatherApi(){
-    var weatherUrl = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + long + '&appid=c99c17905b00b5b873d957ca08c3669d';
+    var weatherUrl = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + long + '&appid=c99c17905b00b5b873d957ca08c3669d';
      fetch(weatherUrl)
          .then(function(response){
              return response.json();
