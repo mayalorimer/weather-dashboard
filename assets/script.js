@@ -113,7 +113,7 @@ function displayCurrentWeather(){
     currentWindEl.textContent = "Wind speed: " + windSpeed + ' mph'; 
     currentUVEl.textContent = "UV Index: " + UVindex;
     currentUVEl.setAttribute('style', "background-color: " + color); 
-    var imgUrl = "http://openweathermap.org/img/w/" + weatherIcon + ".png";
+    var imgUrl = "https://openweathermap.org/img/w/" + weatherIcon + ".png";
     currentIcon.setAttribute("src", imgUrl);
 
 }
@@ -156,7 +156,7 @@ function display5day(date, weatherIcon, temp, windSpeed, humidity){
 
     // adding the weather icon
     var new2 = document.createElement('img'); 
-    var imgUrl = "http://openweathermap.org/img/w/" + weatherIcon + ".png";
+    var imgUrl = "https://openweathermap.org/img/w/" + weatherIcon + ".png";
     new2.setAttribute("alt", "Weather icon"); 
     new2.setAttribute("src", imgUrl);
     newDiv.appendChild(new2);
